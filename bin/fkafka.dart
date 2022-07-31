@@ -71,12 +71,8 @@ class FkafkaProducerClient extends FkafkaClient {
 
     final result = <FkafkaTopic>[];
     // traverse the topic name
-    for (int i = 0;; i++) {
+    for (int i = 0; i < rd_kafka_metadata.value.ref.topic_cnt; i++) {
       var topic = rd_kafka_metadata.value.ref.topics[i];
-      if (topic.err != 0) {
-        // FIXME exception will occur if the topic is not found
-        break;
-      }
       result.add(FkafkaTopic(name: topic.topic.toDartString()));
     }
 
