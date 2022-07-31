@@ -220,11 +220,11 @@ class rd_kafka_metadata_partition extends Struct {
   external int err;
   @IntPtr()
   external int leader;
-  @IntPtr()
+  @Int32()
   external int replica_cnt;
   @IntPtr()
   external int replicas;
-  @IntPtr()
+  @Int32()
   external int isr_cnt;
   @IntPtr()
   external int isrs;
