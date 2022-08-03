@@ -67,3 +67,10 @@ final String rd_kafka_err2str_symbol = 'rd_kafka_err2str';
 /// [err] index of [rd_kafka_resp_err_t_e]
 typedef rd_kafka_err2name_native_t = Pointer<Utf8> Function(Int32 err);
 final String rd_kafka_err2name_symbol = 'rd_kafka_err2name';
+
+/// [group] is an optional group name to describe, otherwise (NULL) all groups are returned.
+typedef rd_kafka_list_groups_native_t = Int32 Function(Pointer<rd_kafka_t> rk, Pointer<Utf8> group, Pointer<Pointer<rd_kafka_group_list>> grplistp, Int32 timeout_ms);
+final String rd_kafka_list_groups_symbol = 'rd_kafka_list_groups';
+
+typedef rd_kafka_group_list_destroy_native_t = Void Function(Pointer<rd_kafka_group_list> grplist);
+final String rd_kafka_group_list_destroy_symbol = 'rd_kafka_group_list_destroy';

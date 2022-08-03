@@ -127,6 +127,23 @@ class FkafkaConsumerClient extends FkafkaClient {
 
   FkafkaConsumerClient({required FkafkaConf conf}) : super(rd_kafka_type_t_e.RD_KAFKA_CONSUMER, conf);
 
+  /// find group
+  ///
+  /// [group] specified group, query all topics if null
+  List<FkafkaGroup> findGroups({String? group}) {
+
+    Pointer<Pointer<rd_kafka_group_list>> grplistp = calloc();
+
+    _bridges.rd_kafka_list_groups(
+        _kafkaPtr,
+        group == null ? nullptr : group.toNativeUtf8(),
+        grplistp,
+        defaultTimeoutMs
+    );
+
+    return grplistp.value.ref.groupList.map((_) => FkafkaGroup.metadata(_)).toList();
+  }
+
   @override
   release() {
     _bridges.rd_kafka_destroy(_kafkaPtr);
@@ -194,4 +211,30 @@ class FkafkaPartition {
   int? low;
   // high offset
   int? high;
+}
+
+class FkafkaGroup {
+  FkafkaGroup({
+    required this.name,
+    this.state,
+    this.protocolType,
+    this.protocol
+  });
+
+  final String name;
+  String? state;
+  String? protocolType;
+  String? protocol;
+
+  factory FkafkaGroup.metadata(rd_kafka_group_info groupMetadata) => FkafkaGroup(
+      name: groupMetadata.group.toDartString(),
+      state: groupMetadata.state.toDartString(),
+      protocolType: groupMetadata.protocol_type.toDartString(),
+      protocol: groupMetadata.protocol.toDartString()
+  );
+
+  @override
+  String toString() {
+    return 'FkafkaGroup{name: $name, state: $state, protocolType: $protocolType, protocol: $protocol}';
+  }
 }

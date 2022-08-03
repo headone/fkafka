@@ -244,4 +244,54 @@ class rd_kafka_metadata_partition extends Struct {
   external Pointer<Int32> isrs;
 }
 
+class rd_kafka_group_list extends Struct {
+
+  external Pointer<rd_kafka_group_info> groups;
+  @Int32()
+  external int group_cnt;
+
+  List<rd_kafka_group_info> get groupList {
+    var result = <rd_kafka_group_info>[];
+    for (int i = 0; i < group_cnt; i++) {
+      result.add(groups[i]);
+    }
+    return result;
+  }
+}
+
+class rd_kafka_group_info extends Struct {
+
+  external rd_kafka_metadata_broker broker;
+  external Pointer<Utf8> group;
+  /// index of [rd_kafka_resp_err_t_e]
+  @Int32()
+  external int err;
+  external Pointer<Utf8> state;
+  external Pointer<Utf8> protocol_type;
+  external Pointer<Utf8> protocol;
+  external Pointer<rd_kafka_group_member_info> members;
+  @Int32()
+  external int member_cnt;
+
+  List<rd_kafka_group_member_info> get memberList {
+    var result = <rd_kafka_group_member_info>[];
+    for (int i = 0; i < member_cnt; i++) {
+      result.add(members[i]);
+    }
+    return result;
+  }
+}
+
+class rd_kafka_group_member_info extends Struct {
+
+  external Pointer<Utf8> member_id;
+  external Pointer<Utf8> client_id;
+  external Pointer<Utf8> client_host;
+  external Pointer<Void> member_metadata;
+  @Int32()
+  external int member_metadata_size;
+  external Pointer<Void> member_assignment;
+  @Int32()
+  external int member_assignment_size;
+}
 
