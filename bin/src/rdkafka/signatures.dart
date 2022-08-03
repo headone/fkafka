@@ -39,7 +39,7 @@ final String rd_kafka_topic_conf_set_symbol = 'rd_kafka_topic_conf_set';
 /// [all_topics] if non-zero: request info about all topics in cluster, if zero: only request info about locally known topics.
 /// [only_rkt] only request info about this topic
 ///
-/// return inde of [rd_kafka_resp_err_t_e]
+/// return index of [rd_kafka_resp_err_t_e]
 typedef rd_kafka_metadata_native_t = Int32 Function(Pointer<rd_kafka_t> rk, Int32 all_topics, Pointer<rd_kafka_topic_t> only_rkt, Pointer<Pointer<rd_kafka_metadata_t>> metadatap, Int32 timeout_ms);
 final String rd_kafka_metadata_symbol = 'rd_kafka_metadata';
 
@@ -52,8 +52,18 @@ final String rd_kafka_topic_name_symbol = 'rd_kafka_topic_name';
 typedef rd_kafka_destroy_native_t = Void Function(Pointer<rd_kafka_t> rk);
 final String rd_kafka_destroy_symbol = 'rd_kafka_destroy';
 
+/// return index of [rd_kafka_resp_err_t_e]
 typedef rd_kafka_get_watermark_offsets_native_t = Int32 Function(Pointer<rd_kafka_t> rk, Pointer<Utf8> topic, Int32 partition, Pointer<Int64> low, Pointer<Int64> high);
 final String rd_kafka_get_watermark_offsets_symbol = 'rd_kafka_get_watermark_offsets';
 
+/// return index of [rd_kafka_resp_err_t_e]
 typedef rd_kafka_query_watermark_offsets_native_t = Int32 Function(Pointer<rd_kafka_t> rk, Pointer<Utf8> topic, Int32 partition, Pointer<Int64> low, Pointer<Int64> high, Int32 timeout_ms);
 final String rd_kafka_query_watermark_offsets_symbol = 'rd_kafka_query_watermark_offsets';
+
+/// [err] index of [rd_kafka_resp_err_t_e]
+typedef rd_kafka_err2str_native_t = Pointer<Utf8> Function(Int32 err);
+final String rd_kafka_err2str_symbol = 'rd_kafka_err2str';
+
+/// [err] index of [rd_kafka_resp_err_t_e]
+typedef rd_kafka_err2name_native_t = Pointer<Utf8> Function(Int32 err);
+final String rd_kafka_err2name_symbol = 'rd_kafka_err2name';
