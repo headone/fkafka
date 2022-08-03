@@ -141,7 +141,12 @@ class FkafkaConsumerClient extends FkafkaClient {
         defaultTimeoutMs
     );
 
-    return grplistp.value.ref.groupList.map((_) => FkafkaGroup.metadata(_)).toList();
+    var result = grplistp.value.ref.groupList.map((_) => FkafkaGroup.metadata(_)).toList();
+
+    // release
+    calloc.free(grplistp);
+
+    return result;
   }
 
   @override
