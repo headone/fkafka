@@ -229,21 +229,19 @@ class rd_kafka_metadata_topic extends Struct {
 
 class rd_kafka_metadata_partition extends Struct {
 
-  @IntPtr()
+  @Int32()
   external int id;
   /// index of [rd_kafka_resp_err_t_e]
   @Int32()
   external int err;
-  @IntPtr()
+  @Int32()
   external int leader;
   @Int32()
   external int replica_cnt;
-  @IntPtr()
-  external int replicas;
+  external Pointer<Int32> replicas;
   @Int32()
   external int isr_cnt;
-  @IntPtr()
-  external int isrs;
+  external Pointer<Int32> isrs;
 }
 
 
