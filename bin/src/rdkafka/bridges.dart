@@ -40,4 +40,6 @@ class RdkafkaBridges {
   late void Function(Pointer<rd_kafka_topic_t> rkt) rd_kafka_topic_destroy = _lib.lookup<NativeFunction<rd_kafka_topic_destroy_native_t>>(rd_kafka_topic_destroy_symbol).asFunction();
 
   late rd_kafka_topic_name_native_t rd_kafka_topic_name = _lib.lookup<NativeFunction<rd_kafka_topic_name_native_t>>(rd_kafka_topic_name_symbol).asFunction();
+
+  late void Function(Pointer<rd_kafka_t> rk) rd_kafka_destroy = _lib.lookup<NativeFunction<rd_kafka_destroy_native_t>>(rd_kafka_destroy_symbol).asFunction();
 }

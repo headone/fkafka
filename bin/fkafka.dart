@@ -84,8 +84,7 @@ class FkafkaProducerClient extends FkafkaClient {
 
   @override
   release() {
-    // TODO: implement destroy
-    throw UnimplementedError();
+    _bridges.rd_kafka_destroy(_kafkaPtr);
   }
 }
 
@@ -96,8 +95,7 @@ class FkafkaConsumerClient extends FkafkaClient {
 
   @override
   release() {
-    // TODO: implement destroy
-    throw UnimplementedError();
+    _bridges.rd_kafka_destroy(_kafkaPtr);
   }
 }
 

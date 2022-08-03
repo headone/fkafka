@@ -49,3 +49,5 @@ final String rd_kafka_topic_destroy_symbol = 'rd_kafka_topic_destroy';
 typedef rd_kafka_topic_name_native_t = Pointer<Utf8> Function(Pointer<rd_kafka_topic_t> rkt);
 final String rd_kafka_topic_name_symbol = 'rd_kafka_topic_name';
 
+typedef rd_kafka_destroy_native_t = Void Function(Pointer<rd_kafka_t> rk);
+final String rd_kafka_destroy_symbol = 'rd_kafka_destroy';
