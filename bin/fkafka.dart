@@ -38,7 +38,7 @@ abstract class FkafkaClient {
 /// kafka producer client
 class FkafkaProducerClient extends FkafkaClient {
 
-  FkafkaProducerClient(FkafkaConf conf) : super(rd_kafka_type_t_e.RD_KAFKA_PRODUCER, conf);
+  FkafkaProducerClient({required FkafkaConf conf}) : super(rd_kafka_type_t_e.RD_KAFKA_PRODUCER, conf);
 
   /// create topic
   ///
@@ -97,7 +97,7 @@ class FkafkaProducerClient extends FkafkaClient {
 /// kafka consumer client
 class FkafkaConsumerClient extends FkafkaClient {
 
-  FkafkaConsumerClient(FkafkaConf conf) : super(rd_kafka_type_t_e.RD_KAFKA_CONSUMER, conf);
+  FkafkaConsumerClient({required FkafkaConf conf}) : super(rd_kafka_type_t_e.RD_KAFKA_CONSUMER, conf);
 
   @override
   release() {
