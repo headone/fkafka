@@ -42,4 +42,8 @@ class RdkafkaBridges {
   late rd_kafka_topic_name_native_t rd_kafka_topic_name = _lib.lookup<NativeFunction<rd_kafka_topic_name_native_t>>(rd_kafka_topic_name_symbol).asFunction();
 
   late void Function(Pointer<rd_kafka_t> rk) rd_kafka_destroy = _lib.lookup<NativeFunction<rd_kafka_destroy_native_t>>(rd_kafka_destroy_symbol).asFunction();
+
+  late int Function(Pointer<rd_kafka_t> rk, Pointer<Utf8> topic, int partition, Pointer<Int64> low, Pointer<Int64> high) rd_kafka_get_watermark_offsets = _lib.lookup<NativeFunction<rd_kafka_get_watermark_offsets_native_t>>(rd_kafka_get_watermark_offsets_symbol).asFunction();
+
+  late int Function(Pointer<rd_kafka_t> rk, Pointer<Utf8> topic, int partition, Pointer<Int64> low, Pointer<Int64> high, int timeout_ms) rd_kafka_query_watermark_offsets = _lib.lookup<NativeFunction<rd_kafka_query_watermark_offsets_native_t>>(rd_kafka_get_watermark_offsets_symbol).asFunction();
 }

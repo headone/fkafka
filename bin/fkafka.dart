@@ -90,6 +90,32 @@ class FkafkaProducerClient extends FkafkaClient {
     return result;
   }
 
+  /// fill FkafkaPartition low and high offsets
+  void fillOffsets(FkafkaTopic topic) {
+    assert(topic.partitions != null && topic.partitions!.isNotEmpty);
+
+    for (FkafkaPartition partition in topic.partitions!) {
+      Pointer<Int64> low = malloc.allocate(sizeOf<Int64>());
+      Pointer<Int64> high = malloc.allocate(sizeOf<Int64>());
+      _bridges.rd_kafka_query_watermark_offsets(
+          _kafkaPtr,
+          topic.name.toNativeUtf8(),
+          partition.id,
+          low,
+          high,
+          defaultTimeoutMs
+      );
+
+      // set result
+      partition.low = low.value;
+      partition.high = high.value;
+
+      // release
+      malloc.free(low);
+      malloc.free(high);
+    }
+  }
+
   @override
   release() {
     _bridges.rd_kafka_destroy(_kafkaPtr);
@@ -159,9 +185,13 @@ class FkafkaTopic {
 }
 
 class FkafkaPartition {
-  const FkafkaPartition({
+  FkafkaPartition({
     required this.id
   });
 
   final int id;
+  // low offset
+  int? low;
+  // high offset
+  int? high;
 }

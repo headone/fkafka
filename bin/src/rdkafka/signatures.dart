@@ -51,3 +51,9 @@ final String rd_kafka_topic_name_symbol = 'rd_kafka_topic_name';
 
 typedef rd_kafka_destroy_native_t = Void Function(Pointer<rd_kafka_t> rk);
 final String rd_kafka_destroy_symbol = 'rd_kafka_destroy';
+
+typedef rd_kafka_get_watermark_offsets_native_t = Int32 Function(Pointer<rd_kafka_t> rk, Pointer<Utf8> topic, Int32 partition, Pointer<Int64> low, Pointer<Int64> high);
+final String rd_kafka_get_watermark_offsets_symbol = 'rd_kafka_get_watermark_offsets';
+
+typedef rd_kafka_query_watermark_offsets_native_t = Int32 Function(Pointer<rd_kafka_t> rk, Pointer<Utf8> topic, Int32 partition, Pointer<Int64> low, Pointer<Int64> high, Int32 timeout_ms);
+final String rd_kafka_query_watermark_offsets_symbol = 'rd_kafka_query_watermark_offsets';
