@@ -31,6 +31,9 @@ abstract class FkafkaClient {
     );
   }
 
+  /// librdkafka version
+  String get libVersion => _bridges.rd_kafka_version_str().toDartString();
+
   /// release native handle
   release();
 }
