@@ -57,13 +57,14 @@ class FkafkaProducerClient extends FkafkaClient {
 
   /// find topics
   ///
-  /// [onlyLocalTopic] TODO find only specified topics
+  /// [topics] specified topics, query all topics if null
   List<FkafkaTopic> findTopics({List<String> topics = const []}) {
     Pointer<Pointer<rd_kafka_metadata_t>> rd_kafka_metadata = calloc();
     // find
     _bridges.rd_kafka_metadata(
         _kafkaPtr,
-        topics.isEmpty ? 1 : 0,
+        // always query all topics
+        1,
         nullptr,
         rd_kafka_metadata,
         defaultTimeoutMs
@@ -73,7 +74,12 @@ class FkafkaProducerClient extends FkafkaClient {
     // traverse the topic name
     for (int i = 0; i < rd_kafka_metadata.value.ref.topic_cnt; i++) {
       var topic = rd_kafka_metadata.value.ref.topics[i];
-      result.add(FkafkaTopic(name: topic.topic.toDartString()));
+      result.add(FkafkaTopic(name: topic.topic.toDartString())..release());
+    }
+
+    // filter
+    if (topics.isNotEmpty) {
+      result.removeWhere((_) => !topics.contains(_.name));
     }
 
     // release
