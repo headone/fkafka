@@ -54,4 +54,6 @@ class RdkafkaBridges {
   late int Function(Pointer<rd_kafka_t> rk, Pointer<Utf8> group, Pointer<Pointer<rd_kafka_group_list>> grplistp, int timeout_ms) rd_kafka_list_groups = _lib.lookup<NativeFunction<rd_kafka_list_groups_native_t>>(rd_kafka_list_groups_symbol).asFunction();
 
   late void Function(Pointer<rd_kafka_group_list>) rd_kafka_group_list_destroy = _lib.lookup<NativeFunction<rd_kafka_group_list_destroy_native_t>>(rd_kafka_group_list_destroy_symbol).asFunction();
+
+  late Pointer<rd_kafka_topic_partition_list_t> Function(int size) rd_kafka_topic_partition_list_new = _lib.lookup<NativeFunction<rd_kafka_topic_partition_list_new_native_t>>(rd_kafka_topic_partition_list_new_symbol).asFunction();
 }

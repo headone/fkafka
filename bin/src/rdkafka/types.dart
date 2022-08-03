@@ -295,3 +295,36 @@ class rd_kafka_group_member_info extends Struct {
   external int member_assignment_size;
 }
 
+class rd_kafka_topic_partition_list_t extends Struct {
+
+  @Int32()
+  external int cnt;
+  @Int32()
+  external int size;
+  external Pointer<rd_kafka_topic_partition_t> elems;
+
+  List<rd_kafka_topic_partition_t> get elemList {
+    var result = <rd_kafka_topic_partition_t>[];
+    for (int i = 0; i < cnt; i++) {
+      result.add(elems[i]);
+    }
+    return result;
+  }
+}
+
+class rd_kafka_topic_partition_t extends Struct {
+
+  external Pointer<Utf8> topic;
+  @Int32()
+  external int partition;
+  @Int32()
+  external int offset;
+  external Pointer<Void> metadata;
+  @Int32()
+  external int metadata_size;
+  external Pointer<Void> opaque;
+  @Int32()
+  external int err;
+  external Pointer<Void> _private;
+}
+
