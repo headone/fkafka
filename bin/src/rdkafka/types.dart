@@ -189,6 +189,14 @@ class rd_kafka_metadata_t extends Struct {
   @IntPtr()
   external int orig_broker_id;
   external Pointer<Utf8> orig_broker_name;
+
+  List<rd_kafka_metadata_topic> get topicList {
+    var result = <rd_kafka_metadata_topic>[];
+    for (int i = 0; i < topic_cnt; i++) {
+      result.add(topics[i]);
+    }
+    return result;
+  }
 }
 
 class rd_kafka_metadata_broker extends Struct {
@@ -209,6 +217,14 @@ class rd_kafka_metadata_topic extends Struct {
   /// index of [rd_kafka_resp_err_t_e]
   @Int32()
   external int err;
+
+  List<rd_kafka_metadata_partition> get partitionList {
+    var result = <rd_kafka_metadata_partition>[];
+    for (int i = 0; i < partition_cnt; i++) {
+      result.add(partitions[i]);
+    }
+    return result;
+  }
 }
 
 class rd_kafka_metadata_partition extends Struct {

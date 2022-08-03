@@ -51,8 +51,9 @@ class FkafkaProducerClient extends FkafkaClient {
       nullptr
     );
 
-    return FkafkaTopic(topicPtr: topicPtr)
-      ..release();
+    var result =  FkafkaTopic.ptr(topicPtr);
+    _bridges.rd_kafka_topic_destroy(topicPtr);
+    return result;
   }
 
   /// find topics
@@ -70,12 +71,10 @@ class FkafkaProducerClient extends FkafkaClient {
         defaultTimeoutMs
     );
 
-    final result = <FkafkaTopic>[];
-    // traverse the topic name
-    for (int i = 0; i < rd_kafka_metadata.value.ref.topic_cnt; i++) {
-      var topic = rd_kafka_metadata.value.ref.topics[i];
-      result.add(FkafkaTopic(name: topic.topic.toDartString())..release());
-    }
+    // traverse the topic
+    final result = rd_kafka_metadata.value.ref.topicList
+        .map((_) => FkafkaTopic.metadata(_))
+        .toList();
 
     // filter
     if (topics.isNotEmpty) {
@@ -135,25 +134,31 @@ class FkafkaConf {
 }
 
 class FkafkaTopic {
+  const FkafkaTopic({
+    required this.name,
+    this.partitionCount,
+    this.partitions
+  });
 
-  final Pointer<rd_kafka_topic_t>? topicPtr;
-  String? name;
+  final String name;
+  final int? partitionCount;
+  final List<FkafkaPartition>? partitions;
 
-  FkafkaTopic({this.topicPtr, this.name}) {
-    if (topicPtr != null) {
-      final _name = _bridges.rd_kafka_topic_name(topicPtr!)
-          .toDartString();
-      if (name != null) {
-        assert(_name == name, 'rd_kafka_topic_t_name not equal to name');
-      }
-      name = _name;
-    }
-  }
+  factory FkafkaTopic.ptr(Pointer<rd_kafka_topic_t> topicPtr) => FkafkaTopic(
+        name: _bridges.rd_kafka_topic_name(topicPtr).toDartString()
+    );
 
-  /// release native handle
-  void release() {
-    if (topicPtr != null) {
-      _bridges.rd_kafka_topic_destroy(topicPtr!);
-    }
-  }
+  factory FkafkaTopic.metadata(rd_kafka_metadata_topic topicMetadata) => FkafkaTopic(
+      name: topicMetadata.topic.toDartString(),
+      partitionCount: topicMetadata.partition_cnt,
+      partitions: topicMetadata.partitionList.map((_) => FkafkaPartition(id: _.id)).toList()
+  );
+}
+
+class FkafkaPartition {
+  const FkafkaPartition({
+    required this.id
+  });
+
+  final int id;
 }
