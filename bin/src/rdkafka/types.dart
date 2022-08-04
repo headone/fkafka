@@ -317,7 +317,7 @@ class rd_kafka_topic_partition_t extends Struct {
   external Pointer<Utf8> topic;
   @Int32()
   external int partition;
-  @Int32()
+  @Int64()
   external int offset;
   external Pointer<Void> metadata;
   @Int32()
