@@ -186,7 +186,7 @@ class FkafkaAdminClient {
     assert(group.isNotEmpty);
 
     // create consumer client join group
-    final _temporary_cc = FkafkaConsumerClient(
+    final _temp_cc = FkafkaConsumerClient(
         conf: FkafkaConf(
             {
               GROUP_ID: group
@@ -210,7 +210,7 @@ class FkafkaAdminClient {
 
     // find
     _bridges.rd_kafka_committed(
-        _temporary_cc._kafkaPtr,
+        _temp_cc._kafkaPtr,
         rkparlist,
         defaultTimeoutMs
     );
@@ -223,7 +223,7 @@ class FkafkaAdminClient {
 
     // release
     _bridges.rd_kafka_topic_partition_list_destroy(rkparlist);
-    _temporary_cc.release();
+    _temp_cc.release();
 
     return partitions;
   }
