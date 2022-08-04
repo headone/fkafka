@@ -86,3 +86,7 @@ final String rd_kafka_topic_partition_list_add_symbol = 'rd_kafka_topic_partitio
 
 typedef rd_kafka_topic_partition_list_add_range_native_t = Void Function(Pointer<rd_kafka_topic_partition_list_t> rkparlist, Pointer<Utf8> topic, Int32 start, Int32 end);
 final String rd_kafka_topic_partition_list_add_range_symbol = 'rd_kafka_topic_partition_list_add_range';
+
+/// return 1 if partition was found (and removed), else 0.
+typedef rd_kafka_topic_partition_list_del_native_t = Int32 Function(Pointer<rd_kafka_topic_partition_list_t> rkparlist, Pointer<Utf8> topic, Int32 partition);
+final String rd_kafka_topic_partition_list_del_symbol = 'rd_kafka_topic_partition_list_del';
