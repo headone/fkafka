@@ -1,6 +1,6 @@
 name: fkafka_ffi
 description: Use librdkafka via Dart FFI, wraps admin and producer and consumer clients.
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/headone/fkafka
 
 environment:
