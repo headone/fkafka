@@ -69,18 +69,19 @@ class FkafkaAdminClient {
     _pc = FkafkaProducerClient(conf: conf);
 
     // add consumer conf
-    final ccConfMap = Map<String, String>.from(conf.conf)
+    _ccBaseConf = Map<String, String>.from(conf.conf)
       ..addAll({
         CLIENT_ID_CONFIG: 'dart_fkafka_admin',
         ENABLE_AUTO_COMMIT_CONFIG: 'false',
         AUTO_OFFSET_RESET_CONFIG: 'earliest',
         ISOLATION_LEVEL_CONFIG: 'read_committed',
       });
-    _cc = FkafkaConsumerClient(conf: FkafkaConf(ccConfMap));
+    _cc = FkafkaConsumerClient(conf: FkafkaConf(_ccBaseConf));
   }
 
   late FkafkaProducerClient _pc;
   late FkafkaConsumerClient _cc;
+  late Map<String, String> _ccBaseConf;
 
   /// create topic
   ///
@@ -175,6 +176,56 @@ class FkafkaAdminClient {
     calloc.free(grplistp);
 
     return result;
+  }
+
+  /// find topic partition offsets of group's committed
+  ///
+  /// result offset back fill [topic] fields [FkafkaPartition.high]
+  List<FkafkaPartition> findGroupTopicPartitionOffsets(String group, FkafkaTopic topic) {
+    assert(topic.partitions != null && topic.partitions!.isNotEmpty);
+    assert(group.isNotEmpty);
+
+    // create consumer client join group
+    final _temporary_cc = FkafkaConsumerClient(
+        conf: FkafkaConf(
+            {
+              GROUP_ID: group
+            }..addAll(_ccBaseConf)
+        )
+    );
+
+    var rkparlist = _bridges.rd_kafka_topic_partition_list_new(
+      topic.partitionCount!
+    );
+
+    List<FkafkaPartition> partitions = topic.partitions!;
+
+    for (var partition in partitions) {
+      _bridges.rd_kafka_topic_partition_list_add(
+        rkparlist,
+        topic.name.toNativeUtf8(),
+        partition.id
+      );
+    }
+
+    // find
+    _bridges.rd_kafka_committed(
+        _temporary_cc._kafkaPtr,
+        rkparlist,
+        defaultTimeoutMs
+    );
+
+    // result back fill
+    for (var elem in rkparlist.ref.elemList) {
+      var rowPartition = partitions.firstWhere((_) => elem.partition == _.id);
+      rowPartition.high = elem.offset;
+    }
+
+    // release
+    _bridges.rd_kafka_topic_partition_list_destroy(rkparlist);
+    _temporary_cc.release();
+
+    return partitions;
   }
 
   /// release native handle
