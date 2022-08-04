@@ -3,9 +3,9 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 
-import 'src/rdkafka/bridges.dart';
-import 'src/rdkafka/configuration.dart';
-import 'src/rdkafka/types.dart';
+import 'rdkafka/bridges.dart';
+import 'rdkafka/configuration.dart';
+import 'rdkafka/types.dart';
 
 /// default timeout (ms) of connect to kafka
 const int defaultTimeoutMs = 30000;
