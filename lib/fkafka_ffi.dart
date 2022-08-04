@@ -30,3 +30,4 @@
 
 export 'src/fkafka.dart';
 export 'src/rdkafka/bridges.dart';
+export 'src/loader.dart';

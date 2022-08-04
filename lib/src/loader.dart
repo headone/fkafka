@@ -5,8 +5,10 @@ const String ENV_LIBRDKAFKA_ROOT = 'LIBRDKAFKA_ROOT';
 
 class Loader {
 
+  static DynamicLibrary Function() load = _load;
+
   /// load library
-  static DynamicLibrary load() {
+  static DynamicLibrary _load() {
 
     // choose sys
     if (Platform.isWindows) {
