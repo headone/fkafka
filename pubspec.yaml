@@ -14,4 +14,3 @@ dev_dependencies:
   lints: ^1.0.0
 dependencies: 
   ffi: ^1.2.1
-  path: ^1.8.2
