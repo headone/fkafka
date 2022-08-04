@@ -58,4 +58,6 @@ class RdkafkaBridges {
   late Pointer<rd_kafka_topic_partition_list_t> Function(int size) rd_kafka_topic_partition_list_new = _lib.lookup<NativeFunction<rd_kafka_topic_partition_list_new_native_t>>(rd_kafka_topic_partition_list_new_symbol).asFunction();
 
   late void Function(Pointer<rd_kafka_topic_partition_list_t> rkparlist) rd_kafka_topic_partition_list_destroy = _lib.lookup<NativeFunction<rd_kafka_topic_partition_list_destroy_native_t>>(rd_kafka_topic_partition_list_destroy_symbol).asFunction();
+
+  late Pointer<rd_kafka_topic_partition_t> Function(Pointer<rd_kafka_topic_partition_list_t> rkparlist, Pointer<Utf8> topic, int partition) rd_kafka_topic_partition_list_add = _lib.lookup<NativeFunction<rd_kafka_topic_partition_list_add_native_t>>(rd_kafka_topic_partition_list_add_symbol).asFunction();
 }
