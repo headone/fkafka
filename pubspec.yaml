@@ -1,14 +1,10 @@
-name: fkafka
-description: A simple command-line application.
+name: fkafka_ffi
+description: Use librdkafka via Dart FFI, wraps admin and producer and consumer clients.
 version: 1.0.0
-# homepage: https://www.example.com
+homepage: https://github.com/headone/fkafka
 
 environment:
   sdk: '>=2.16.2 <3.0.0'
-
-
-# dependencies:
-#   path: ^1.8.0
 
 dev_dependencies:
   lints: ^1.0.0
