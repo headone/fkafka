@@ -77,3 +77,6 @@ final String rd_kafka_group_list_destroy_symbol = 'rd_kafka_group_list_destroy';
 
 typedef rd_kafka_topic_partition_list_new_native_t = Pointer<rd_kafka_topic_partition_list_t> Function(Int32 size);
 final String rd_kafka_topic_partition_list_new_symbol = 'rd_kafka_topic_partition_list_new';
+
+typedef rd_kafka_topic_partition_list_destroy_native_t = Void Function(Pointer<rd_kafka_topic_partition_list_t> rkparlist);
+final String rd_kafka_topic_partition_list_destroy_symbol = 'rd_kafka_topic_partition_list_destroy';
