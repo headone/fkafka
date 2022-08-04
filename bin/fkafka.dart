@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 
 import 'src/rdkafka/bridges.dart';
+import 'src/rdkafka/configuration.dart';
 import 'src/rdkafka/types.dart';
 
 /// default timeout (ms) of connect to kafka
@@ -43,15 +44,53 @@ class FkafkaProducerClient extends FkafkaClient {
 
   FkafkaProducerClient({required FkafkaConf conf}) : super(rd_kafka_type_t_e.RD_KAFKA_PRODUCER, conf);
 
+  @override
+  release() {
+    _bridges.rd_kafka_destroy(_kafkaPtr);
+  }
+}
+
+/// kafka consumer client
+class FkafkaConsumerClient extends FkafkaClient {
+
+  FkafkaConsumerClient({required FkafkaConf conf}) : super(rd_kafka_type_t_e.RD_KAFKA_CONSUMER, conf);
+
+  @override
+  release() {
+    _bridges.rd_kafka_destroy(_kafkaPtr);
+  }
+}
+
+/// kafka admin client
+class FkafkaAdminClient {
+  FkafkaAdminClient({
+    required FkafkaConf conf
+  }) {
+    _pc = FkafkaProducerClient(conf: conf);
+
+    // add consumer conf
+    final ccConfMap = Map<String, String>.from(conf.conf)
+      ..addAll({
+        CLIENT_ID_CONFIG: 'dart_fkafka_admin',
+        ENABLE_AUTO_COMMIT_CONFIG: 'false',
+        AUTO_OFFSET_RESET_CONFIG: 'earliest',
+        ISOLATION_LEVEL_CONFIG: 'read_committed',
+      });
+    _cc = FkafkaConsumerClient(conf: FkafkaConf(ccConfMap));
+  }
+
+  late FkafkaProducerClient _pc;
+  late FkafkaConsumerClient _cc;
+
   /// create topic
   ///
   /// TODO customize topic conf
   FkafkaTopic newTopic(String topic) {
     assert(topic.isNotEmpty);
     var topicPtr = _bridges.rd_kafka_topic_new.call(
-      _kafkaPtr,
-      topic.toNativeUtf8(),
-      nullptr
+        _pc._kafkaPtr,
+        topic.toNativeUtf8(),
+        nullptr
     );
 
     var result =  FkafkaTopic.ptr(topicPtr);
@@ -66,7 +105,7 @@ class FkafkaProducerClient extends FkafkaClient {
     Pointer<Pointer<rd_kafka_metadata_t>> rd_kafka_metadata = calloc();
     // find
     _bridges.rd_kafka_metadata(
-        _kafkaPtr,
+        _pc._kafkaPtr,
         // always query all topics
         1,
         nullptr,
@@ -98,7 +137,7 @@ class FkafkaProducerClient extends FkafkaClient {
       Pointer<Int64> low = malloc.allocate(sizeOf<Int64>());
       Pointer<Int64> high = malloc.allocate(sizeOf<Int64>());
       _bridges.rd_kafka_query_watermark_offsets(
-          _kafkaPtr,
+          _pc._kafkaPtr,
           topic.name.toNativeUtf8(),
           partition.id,
           low,
@@ -116,17 +155,6 @@ class FkafkaProducerClient extends FkafkaClient {
     }
   }
 
-  @override
-  release() {
-    _bridges.rd_kafka_destroy(_kafkaPtr);
-  }
-}
-
-/// kafka consumer client
-class FkafkaConsumerClient extends FkafkaClient {
-
-  FkafkaConsumerClient({required FkafkaConf conf}) : super(rd_kafka_type_t_e.RD_KAFKA_CONSUMER, conf);
-
   /// find group
   ///
   /// [group] specified group, query all topics if null
@@ -135,7 +163,7 @@ class FkafkaConsumerClient extends FkafkaClient {
     Pointer<Pointer<rd_kafka_group_list>> grplistp = calloc();
 
     _bridges.rd_kafka_list_groups(
-        _kafkaPtr,
+        _cc._kafkaPtr,
         group == null ? nullptr : group.toNativeUtf8(),
         grplistp,
         defaultTimeoutMs
@@ -149,15 +177,11 @@ class FkafkaConsumerClient extends FkafkaClient {
     return result;
   }
 
-  @override
+  /// release native handle
   release() {
-    _bridges.rd_kafka_destroy(_kafkaPtr);
+    _pc.release();
+    _cc.release();
   }
-}
-
-/// kafka admin client
-class FkafkaAdminClient {
-  // TODO
 }
 
 class FkafkaConf {
@@ -237,9 +261,4 @@ class FkafkaGroup {
       protocolType: groupMetadata.protocol_type.toDartString(),
       protocol: groupMetadata.protocol.toDartString()
   );
-
-  @override
-  String toString() {
-    return 'FkafkaGroup{name: $name, state: $state, protocolType: $protocolType, protocol: $protocol}';
-  }
 }
