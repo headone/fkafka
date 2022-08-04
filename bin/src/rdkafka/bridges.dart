@@ -64,4 +64,6 @@ class RdkafkaBridges {
   late void Function(Pointer<rd_kafka_topic_partition_list_t> rkparlist, Pointer<Utf8> topic, int start, int end) rd_kafka_topic_partition_list_add_range = _lib.lookup<NativeFunction<rd_kafka_topic_partition_list_add_range_native_t>>(rd_kafka_topic_partition_list_add_range_symbol).asFunction();
 
   late int Function(Pointer<rd_kafka_topic_partition_list_t> rkparlist, Pointer<Utf8> topic, int partition) rd_kafka_topic_partition_list_del = _lib.lookup<NativeFunction<rd_kafka_topic_partition_list_del_native_t>>(rd_kafka_topic_partition_list_del_symbol).asFunction();
+
+  late int Function(Pointer<rd_kafka_topic_partition_list_t> rkparlist, Pointer<Utf8> topic, int partition, int offset) rd_kafka_topic_partition_list_set_offset = _lib.lookup<NativeFunction<rd_kafka_topic_partition_list_set_offset_native_t>>(rd_kafka_topic_partition_list_set_offset_symbol).asFunction();
 }

@@ -90,3 +90,7 @@ final String rd_kafka_topic_partition_list_add_range_symbol = 'rd_kafka_topic_pa
 /// return 1 if partition was found (and removed), else 0.
 typedef rd_kafka_topic_partition_list_del_native_t = Int32 Function(Pointer<rd_kafka_topic_partition_list_t> rkparlist, Pointer<Utf8> topic, Int32 partition);
 final String rd_kafka_topic_partition_list_del_symbol = 'rd_kafka_topic_partition_list_del';
+
+/// return index of [rd_kafka_resp_err_t_e]
+typedef rd_kafka_topic_partition_list_set_offset_native_t = Int32 Function(Pointer<rd_kafka_topic_partition_list_t> rkparlist, Pointer<Utf8> topic, Int32 partition, Int64 offset);
+final String rd_kafka_topic_partition_list_set_offset_symbol = 'rd_kafka_topic_partition_list_set_offset';
