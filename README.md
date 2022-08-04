@@ -52,7 +52,3 @@ Use [librdkafka](https://github.com/edenhill/librdkafka) via Dart FFI, wraps adm
    client.release();
    ```
 
-
-## License
-
-[MIT License](https://github.com/headone/fkafka/blob/master/LICENSE)
