@@ -2,11 +2,11 @@
 
 ## Overview
 
-Use [librdkafka](https://github.com/edenhill/librdkafka) via Dart FFI, wraps admin and producer and consumer clients.
+Use [librdkafka](https://github.com/edenhill/librdkafka) via Dart FFI. Wraps Admin and Producer and Consumer clients, can also use librdkafka interface via FFI.
 
 ## Features
 
-### 1. Admin Client
+### Admin Client
 
 - create topic
 - query topics
@@ -14,19 +14,40 @@ Use [librdkafka](https://github.com/edenhill/librdkafka) via Dart FFI, wraps adm
 - query topic offsets
 - query group committed offsets
 
-### 2. Producer Client
+### Producer Client
 
 (coming soon)
 
-### 3. Consumer Client
+### Consumer Client
 
 (coming soon)
+
+### librdkafka Bridges
+
+Use the bound librdkafka interface via FFI
 
 ## Usage
 
-1. ready *librdkafka*
+1. ready ***librdkafka***
 
-   - if **windows**, can download *dll* file form [this](https://github.com/headone/fkafka/tree/master/lib/librdkafka), and then put the file in current dir or set env `LIBRDKAFKA_ROOT` the value is dll file dir.
+   - if **windows**, you can download **dll** file form [here](https://github.com/headone/fkafka/tree/master/lib/librdkafka), and then put the file in current directory or set environment `LIBRDKAFKA_ROOT` the value is **dll** file directory.
+   - if **Mac OSX**, install librdkafka with homebrew:
+
+   ```shell
+   $ brew install librdkafka
+   ```
+
+   - On **Debian** and **Ubuntu**, install librdkafka from the Confluent APT repositories, see instructions [here](https://docs.confluent.io/platform/current/installation/installing_cp/deb-ubuntu.html#get-the-software) and then install librdkafka:
+
+   ```shell
+   $ apt install librdkafka-dev
+   ```
+
+   - On **RedHat**, **CentOS**, **Fedora**, install librdkafka from the Confluent YUM repositories, instructions [here](https://docs.confluent.io/platform/current/installation/installing_cp/rhel-centos.html#get-the-software) and then install librdkafka:
+
+   ```shell
+   $ yum install librdkafka-devel
+   ```
 
 1. in your code
 
