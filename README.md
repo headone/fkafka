@@ -1,6 +1,7 @@
 # fkafka - Dart wrapper of the librdkafka
 
-## Overview
+[![Pub](https://img.shields.io/badge/pub-v1.0.2-blue?style=flat-square)](https://pub.dev/packages/fkafka_ffi)
+[![Platform](https://img.shields.io/badge/platform-ANDROID%20%7C%20IOS%20%7C%20LINUX%20%7C%20MACOS%20%7C%20WINDOWS-ff69b4.svg?style=flat-square)](https://github.com/headone/fkafka)
 
 Use [librdkafka](https://github.com/edenhill/librdkafka) via Dart FFI. Wraps Admin and Producer and Consumer clients, can also use librdkafka interface via FFI.
 
